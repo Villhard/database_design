@@ -25,12 +25,12 @@ erDiagram
 - last_name VARCHAR(50) - фамилия читателя
 - email VARCHAR(100) - email читателя
 - phone VARCHAR(20) - телефон читателя
-- address VARCHAR(255) - адрес читателя
+- address VARCHAR(500) - адрес читателя
 
 ### Book
 - book_id INT - первичный ключ книги
-- title VARCHAR(100) - название книги
-- year INT - год издания
+- title VARCHAR(255) - название книги
+- pub_year INT - год издания
 
 ### Author
 - author_id INT - первичный ключ автора
@@ -66,25 +66,25 @@ erDiagram
     BOOKS }|--|{ GENRES : ""
     READERS {
         int reader_id PK
-        string first_name
-        string last_name
-        string email
-        string phone
-        string address
+        str first_name
+        str last_name
+        str email
+        str phone
+        str address
     }
     BOOKS {
         int book_id PK
-        string title
-        int year
+        str title
+        int pub_year
     }
     AUTHORS {
         int author_id PK
-        string first_name
-        string last_name
+        str first_name
+        str last_name
     }
     GENRES {
         int genre_id PK
-        string name
+        str name
     }
     RENTS {
         int rent_id PK
@@ -98,17 +98,59 @@ erDiagram
 ## SQL для создания таблиц
 
 ```sql
-CREATE TABLE readers ();
+CREATE TABLE readers (
+    reader_id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE,
+    phone VARCHAR(20),
+    address VARCHAR(500) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE books ();
+CREATE TABLE books (
+    book_id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    pub_year SMALLINT NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE authors ();
+CREATE TABLE authors (
+    author_id INT PRIMARY KEY AUTO_INCREMENT,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE genres ();
+CREATE TABLE genres (
+    genre_id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL UNIQUE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE rents ();
+CREATE TABLE rents (
+    rent_id INT PRIMARY KEY AUTO_INCREMENT,
+    reader_id INT NOT NULL,
+    book_id INT NOT NULL,
+    rent_date DATE NOT NULL,
+    return_date DATE,
+    FOREIGN KEY (reader_id) REFERENCES readers(reader_id) ON DELETE RESTRICT,
+    FOREIGN KEY (book_id) REFERENCES books(book_id) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE book_authors ();
+CREATE TABLE book_authors (
+    book_id INT NOT NULL,
+    author_id INT NOT NULL,
+    FOREIGN KEY (book_id) REFERENCES books(book_id) ON DELETE CASCADE,
+    FOREIGN KEY (author_id) REFERENCES authors(author_id) ON DELETE CASCADE,
+    PRIMARY KEY (book_id, author_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE book_genres ();
+CREATE TABLE book_genres (
+    book_id INT NOT NULL,
+    genre_id INT NOT NULL,
+    FOREIGN KEY (book_id) REFERENCES books(book_id) ON DELETE CASCADE,
+    FOREIGN KEY (genre_id) REFERENCES genres(genre_id) ON DELETE CASCADE,
+    PRIMARY KEY (book_id, genre_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
+
+## SQL для заполнения таблиц
+
+## SQL для запросов
