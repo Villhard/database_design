@@ -11,10 +11,10 @@
 
 ```mermaid
 erDiagram
-    Reader ||--o{ Rent: ""
-    Book ||--o{ Rent : ""
-    Book }|--|{ Author : ""
-    Book }|--|{ Genre : ""
+    READERS ||--o{ RENTS: ""
+    BOOKS ||--o{ RENTS: ""
+    BOOKS }|--|{ AUTHORS: ""
+    BOOKS }|--|{ GENRES: ""
 ```
 
 ## Сущности
@@ -60,11 +60,11 @@ erDiagram
 
 ```mermaid
 erDiagram
-    Reader ||--o{ Rent : ""
-    Book ||--o{ Rent : ""
-    Book }|--|{ Author : ""
-    Book }|--|{ Genre : ""
-    Reader {
+    READERS ||--o{ RENTS : ""
+    BOOKS ||--o{ RENTS : ""
+    BOOKS }|--|{ AUTHORS : ""
+    BOOKS }|--|{ GENRES : ""
+    READERS {
         int reader_id PK
         string first_name
         string last_name
@@ -72,25 +72,43 @@ erDiagram
         string phone
         string address
     }
-    Book {
+    BOOKS {
         int book_id PK
         string title
         int year
     }
-    Author {
+    AUTHORS {
         int author_id PK
         string first_name
         string last_name
     }
-    Genre {
+    GENRES {
         int genre_id PK
         string name
     }
-    Rent {
+    RENTS {
         int rent_id PK
         int reader_id FK
         int book_id FK
         date rent_date
         date return_date
     }
+```
+
+## SQL для создания таблиц
+
+```sql
+CREATE TABLE readers ();
+
+CREATE TABLE books ();
+
+CREATE TABLE authors ();
+
+CREATE TABLE genres ();
+
+CREATE TABLE rents ();
+
+CREATE TABLE book_authors ();
+
+CREATE TABLE book_genres ();
 ```
